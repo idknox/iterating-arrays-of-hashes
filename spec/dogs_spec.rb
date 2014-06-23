@@ -41,13 +41,13 @@ describe Dogs do
 
   describe "#owners" do
     it "returns all of the owners" do
-      expect(dogs.owners).to match_array(['Joe Smith', 'Sarah Smith', 'Andrew Beter'])
+      expect(dogs.owners).to match_array(['Joe Smith', 'Sarah Darnum', 'Andrew Beter'])
     end
   end
 
   describe "#average_owners" do
     it "returns all average owners" do
-      expect(dogs.average_owners).to match_array(['Sarah Smith', 'Andrew Beter'])
+      expect(dogs.average_owners).to match_array(['Sarah Darnum', 'Andrew Beter'])
     end
   end
 

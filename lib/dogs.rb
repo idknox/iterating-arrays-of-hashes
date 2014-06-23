@@ -123,16 +123,17 @@ class Dogs
 
 
   def find_by_owner (name)
-    output={}
+    output=[]
     @dogs.each do |dog|
-      # owner_first = (dog[:owner][:name][:first])
-      # owner_last = (dog[:owner][:name][:last])
-      if (name == (dog[:owner][:name][:first])) || (name == (dog[:owner][:name][:last]))
-        output[name]=[]
-        (output[name]).push(dog[:name])
+      first = (dog[:owner][:name][:first])
+      last = (dog[:owner][:name][:last])
+      full_name = "#{(dog[:owner][:name][:first])} #{(dog[:owner][:name][:last])}"
+
+      if (name == first) || (name == last) || (name == full_name)
+        output.push(dog)
       end
-  print output[name]
     end
+    output
   end
 
 end

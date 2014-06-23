@@ -75,9 +75,9 @@ describe Dogs do
 
     it "finds a dog by owner's full name" do
       andrews_dogs = dogs.find_by_owner("Andrew Beter")
-      expect(andrews_dogs.length).to eq(3)
+      expect(andrews_dogs.length).to eq(2)
       expect(andrews_dogs.first).to include(name: "Harleigh")
-      expect(andrews_dogs.last).to include(name: "Trixee")
+      expect(andrews_dogs.last).to include(name: "Trixie")
     end
 
     it "returns nothing if no owner is found" do

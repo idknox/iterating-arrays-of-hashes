@@ -5,26 +5,26 @@ class Dogs
 
   def initialize
     joe = {
-      :name => {:first => "Joe", :last => "Smith"},
-      :owner_quality => EXCELLENT
+        :name => {:first => "Joe", :last => "Smith"},
+        :owner_quality => EXCELLENT
     }
     sarah = {
-      :name => {:first => "Sarah", :last => "Darnum"},
-      :owner_quality => AVERAGE
+        :name => {:first => "Sarah", :last => "Darnum"},
+        :owner_quality => AVERAGE
     }
     andrew = {
-      :name => {:first => "Andrew", :last => "Beter"},
-      :owner_quality => AVERAGE
+        :name => {:first => "Andrew", :last => "Beter"},
+        :owner_quality => AVERAGE
     }
 
     @dogs = [
-      {name: "Fido", size: :large, owner: joe},
-      {name: "Yapper", size: :small, owner: joe},
-      {name: "Bruiser", size: :large, owner: joe},
-      {name: "Tank", size: :huge, owner: sarah},
-      {name: "Beast", size: :large, owner: sarah},
-      {name: "Harleigh", size: :medium, owner: andrew},
-      {name: "Trixie", size: :small, owner: andrew}
+        {name: "Fido", size: :large, owner: joe},
+        {name: "Yapper", size: :small, owner: joe},
+        {name: "Bruiser", size: :large, owner: joe},
+        {name: "Tank", size: :huge, owner: sarah},
+        {name: "Beast", size: :large, owner: sarah},
+        {name: "Harleigh", size: :medium, owner: andrew},
+        {name: "Trixie", size: :small, owner: andrew}
     ]
   end
 
@@ -101,21 +101,38 @@ class Dogs
   end
 
   def to_s
-    # joe = []
-    # sarah = []
-    # andrew = []
-    output ={}
+    output={}
     @dogs.each do |dog|
-      if !output.has_key?(dog[:owner][:name][:first])
-      
-        output[dog[:owner][:name][:first]] = dog_ar.push(dog[:name])
-      # elsif dog[:owner][:name][:first] == "Sarah"
-      #   sarah.push(dog[:name])
-      # elsif dog[:owner][:name][:first] == "Andrew"
-      #   andrew.push(dog[:name])
+      owner_name = (dog[:owner][:name][:first])
+      if !output.has_key?(owner_name)
+        output[owner_name]=[]
+      end
+      (output[owner_name]).push(dog[:name])
+    end
+
+    out_string=''
+    output.each do |key, value|
+      if value.length >= 3
+        out_string += "#{key} owns: #{(value[0...-1]).join(", ")}, and #{(value[-1])}"
+      else
+        out_string += "\n#{key} owns: #{(value[0...-1]).join(", ")} and #{(value[-1])}"
       end
     end
-    output[]
-    puts "{dog[:owner][:name][:first]"
+    return out_string
   end
+
+
+  def find_by_owner (name)
+    output={}
+    @dogs.each do |dog|
+      # owner_first = (dog[:owner][:name][:first])
+      # owner_last = (dog[:owner][:name][:last])
+      if (name == (dog[:owner][:name][:first])) || (name == (dog[:owner][:name][:last]))
+        output[name]=[]
+        (output[name]).push(dog[:name])
+      end
+  print output[name]
+    end
+  end
+
 end

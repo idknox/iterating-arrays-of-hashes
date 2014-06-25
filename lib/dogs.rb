@@ -102,11 +102,11 @@ class Dogs
           dog[:owner] = (owner[0])[:owner]
         end
       end
-      (@dogs.select do |dog|
+      @dogs.select do |dog|
         (dog[:owner][:name][:first] == name) ||
         (dog[:owner][:name][:last] == name)  ||
         ("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}" == name)
-        end)
+        end
     else
       owner
     end

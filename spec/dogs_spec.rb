@@ -87,11 +87,11 @@ describe Dogs do
   describe "#change_owner" do
     it "changes an owner based on first name" do
       joe_to_sarah = dogs.change_owner("Fido", "Sarah")
-      # joes = dogs.joes_large_dogs
+      joes = dogs.joes_large_dogs
       expect(joe_to_sarah.length).to eq(3)
       expect(joe_to_sarah[0]).to include(name: "Fido")
       expect(joe_to_sarah[-1]).to include(name: "Beast")
-      # expect (joes).not_to include("Fido")
+      expect(joes).not_to include("Fido")
     end
 
     it "changes the owner based on last name" do

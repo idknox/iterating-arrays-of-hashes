@@ -28,112 +28,97 @@ class Dogs
     ]
   end
 
-  attr_accessor :dogs
-
   def small_dogs
-    output=[]
-    @dogs.each do |dog|
-      if dog[:size] == :small
-        output.push(dog)
-      end
-    end
-    output
+    @dogs.select {|dog| dog[:size] == :small}
   end
 
   def huge_dog
-    output=[]
-    @dogs.each do |dog|
-      if dog[:size] == :huge
-        output.push(dog)
-      end
-    end
-    output[0]
+    (@dogs.select {|dog| dog[:size] == :huge})[0]
   end
 
   def large_dog_names
-    output = []
-    @dogs.each do |dog|
-      if dog[:size] == :large
-        output.push(dog[:name])
-      end
-    end
-    output
+    large = @dogs.select {|dog| dog[:size] == :large}
+    large.map {|dog| dog[:name]}
   end
 
   def joes_large_dogs
-    output = []
-    @dogs.each do |dog|
-      if dog[:size] == :large && dog[:owner][:name][:first] == "Joe"
-        output.push(dog[:name])
-      end
+    joes = @dogs.select do |dog|
+      (dog[:size] == :large) && (dog[:owner][:name][:first] == "Joe")
     end
-    output
+    joes.map {|dog| dog[:name]}
   end
 
   def sizes
-    output = []
-    @dogs.each do |dog|
-      if !output.include?(dog[:size])
-        output.push(dog[:size])
-      end
-    end
-    output.sort.reverse
+    @dogs.map {|dog| dog[:size]}.uniq
   end
 
   def owners
-    output = []
-    @dogs.each do |dog|
-      if !output.include?("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}")
-        output.push("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}")
-      end
-    end
-    output.sort.reverse
+    (@dogs.map do |dog|
+      "#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}"
+    end).uniq
   end
 
   def average_owners
-    output = []
-    @dogs.each do |dog|
-      if dog[:owner][:owner_quality] == AVERAGE && !output.include?("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}")
-        output.push("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}")
-      end
-    end
-    output
+    avg = @dogs.select {|dog| dog[:owner][:owner_quality] == AVERAGE}
+    (avg.map do |dog|
+      "#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}"
+    end).uniq
   end
 
   def to_s
-    output={}
-    @dogs.each do |dog|
-      owner_name = (dog[:owner][:name][:first])
-      if !output.has_key?(owner_name)
-        output[owner_name]=[]
-      end
-      (output[owner_name]).push(dog[:name])
-    end
-
-    out_string=''
-    output.each do |key, value|
-      if value.length >= 3
-        out_string += "#{key} owns: #{(value[0...-1]).join(", ")}, and #{(value[-1])}"
-      else
-        out_string += "\n#{key} owns: #{(value[0...-1]).join(", ")} and #{(value[-1])}"
-      end
-    end
-    return out_string
+    owners = @dogs.group_by {|dog| dog[:owner]}
+    output = (owners.map do |owner, dog|
+                dogs = dog.map {|d| d[:name]}
+                if dogs.length > 2
+                  "#{owner[:name][:first]} owns: #{(dogs[0...-1]).join(", ")}" + ", and #{dogs[-1]}"
+                else
+                  "#{owner[:name][:first]} owns: #{dogs.join(" and ")}"
+                end
+              end)
+    output.join("\n")
   end
 
+  def find_by_owner(input)
+    @dogs.select do |dog|
+      (dog[:owner][:name][:first] == input) ||
+        (dog[:owner][:name][:last] == input) ||
+        ("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}" == input)
+    end
+  end
 
-  def find_by_owner (name)
-    output=[]
+  def change_owner(dog_name, name)
+    # find entry where dog's name is equal to
+    # par, change owner for this entry to the owner whose name
+    # matches par
+
+    owner = @dogs.select do |dog|
+              (dog[:owner][:name][:first] == name) ||
+              (dog[:owner][:name][:last] == name) ||
+              ("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}" == name)
+    end
+    if owner != []
+      @dogs.each do |dog|
+        if dog[:name] == dog_name
+          dog[:owner] = (owner[0])[:owner]
+        end
+      end
+      (@dogs.select do |dog|
+        (dog[:owner][:name][:first] == name) ||
+        (dog[:owner][:name][:last] == name)  ||
+        ("#{dog[:owner][:name][:first]} #{dog[:owner][:name][:last]}" == name)
+        end)
+    else
+      owner
+    end
+  end
+
+  def change_name(old, new)
     @dogs.each do |dog|
-      first = (dog[:owner][:name][:first])
-      last = (dog[:owner][:name][:last])
-      full_name = "#{(dog[:owner][:name][:first])} #{(dog[:owner][:name][:last])}"
-
-      if (name == first) || (name == last) || (name == full_name)
-        output.push(dog)
+      if dog[:name] == old
+        dog[:name] = new
       end
     end
-    output
+    @dogs.select {|dog| dog[:name] == new}
   end
 
 end
